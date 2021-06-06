@@ -19,8 +19,8 @@ class QAE_model(nn.Module):
   def SWAP(self):
     for i in range(self.n_aux_qubits):
         qml.Hadamard(wires = i)
-    for i in range(self.n_aux_qubits):
-        qml.CSWAP(wires = [i, i + self.n_aux_qubits , i + self.n_aux_qubits + self.n_trash_qubits])
+    for i in range(self.n_trash_qubits):
+        qml.CSWAP(wires = [i, i + self.n_aux_qubits , 2 * self.n_trash_qubits - i])
     for i in range(self.n_aux_qubits):
         qml.Hadamard(wires = i)
 
@@ -29,6 +29,7 @@ class QAE_model(nn.Module):
         x = self.qlayer(x)
         #print(self.qlayer.qnode.draw())
         return x
+      
 
   def __init__(self, dev, n_qubits, n_aux_qubits, n_trash_qubits):
     super(QAE_model, self).__init__()
@@ -36,11 +37,14 @@ class QAE_model(nn.Module):
     self.n_qubits = n_qubits
     self.n_aux_qubits = n_aux_qubits
     self.n_trash_qubits = n_trash_qubits
+    self.dev = dev
 
     @qml.qnode(dev)
     def q_circuit(params_rot_begin, params_crot, params_rot_end, inputs=False):
       # Embed the input
-      self.angle_embedding(inputs[2:])
+      # print(n_aux_qubits + n_trash_qubits)
+      # print(len(inputs))
+      self.angle_embedding(inputs[n_aux_qubits + n_trash_qubits:])
 
       # Add the first rotational gates:
       idx = 0
@@ -69,10 +73,11 @@ class QAE_model(nn.Module):
 
       return [qml.probs(i) for i in range(self.n_aux_qubits)]
 
+
     training_qubits_size = n_qubits - n_aux_qubits - n_trash_qubits
 
     weight_shapes = {"params_rot_begin": (training_qubits_size * 3),
                      "params_crot": (training_qubits_size * (training_qubits_size - 1) * 3), 
                      "params_rot_end":  (training_qubits_size * 3)}
 
-    self.qlayer = qml.qnn.TorchLayer(q_circuit, weight_shapes)
+    self.qlayer = qml.qnn.TorchLayer(q_circuit, weight_shapes) 

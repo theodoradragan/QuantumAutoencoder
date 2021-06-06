@@ -7,11 +7,13 @@ from torchvision import datasets,transforms
 
 def loss_func(output):
   # Implemented as the Fidelity Loss
-  fidelity_loss = - torch.log(1-output[0][0][0])
+  # output[0] because we take the probability that the state after the 
+  # SWAP test is ket(0), like the reference state
+  fidelity_loss = 1 / torch.squeeze(output)[0]
   return fidelity_loss
 
 def get_dataset(img_shape, batch_size, train):
   trainset = datasets.MNIST(root='./dataset', train=train, download=True,
-                          transform=transforms.Compose([transforms.Resize((img_shape,img_shape)),transforms.ToTensor()])
+                          transform=transforms.Compose([transforms.Resize((img_shape,img_shape+1)),transforms.ToTensor()])
                           )
   return trainset
