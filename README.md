@@ -13,3 +13,9 @@ Any of the parameters are optional, if any of them are not given, the default on
 The model employed is created using PennyLane and can be found in qae_model.py, and the loss and data loading are described in utils.py.
 
 A modification brought was writing the loss as loss = 1 / fidelity, which helped the improval of the fidelity during the training.
+
+Results obtained: 
+
+| No. input qubits | No. output qubits | Fidelity  | Train and test time  |
+| ---------------- | ----------------- | --------- | -------------------- |
+|         4        |         3         |   0.997   |        15 mins       |
