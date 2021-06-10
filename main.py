@@ -23,8 +23,8 @@ learning_rate = 0.0003  # 0.0003 is the best so far
 batch_size = 8
 num_samples = 64
 
-total_qubits = 6
-latent_qubits = 3
+total_qubits = 4
+latent_qubits = 2
 
 shots = 1000
 
@@ -81,7 +81,7 @@ qae = QAE_model(dev, wires, 1, trash_qubits)
 # and goes into the SWAP Test
 # and we add trash_qubits as that is the number of qubits for the reference state
 
-input_data = get_dataset(img_shape = 2, batch_size = 4, train = True)
+input_data = get_dataset(img_width = 2, img_height = int(total_qubits/2), train = True)
 
 start = timeit.timeit()
 total_loss_train = []
@@ -134,7 +134,7 @@ for epoch in range(epochs):
     fidelity_train.append(running_fidelity_train/num_samples)
     fidelity_val.append(running_fidelity_val/num_samples)
             
-    if epoch % 10 == 0:
+    if epoch % 1 == 0:
         print('Error for training for epoch no. ' +  str(epoch + 1)  + ': {:.4f}'.format(running_loss_train/num_samples))
         print('Error for validation for epoch no. ' +  str(epoch + 1)  + ': {:.4f}'.format(running_loss_val/num_samples)) 
 

@@ -12,8 +12,8 @@ def loss_func(output):
   fidelity_loss = 1 / torch.squeeze(output)[0]
   return fidelity_loss
 
-def get_dataset(img_shape, batch_size, train):
+def get_dataset(img_width, img_height, train):
   trainset = datasets.MNIST(root='./dataset', train=train, download=True,
-                          transform=transforms.Compose([transforms.Resize((img_shape,img_shape+1)),transforms.ToTensor()])
+                          transform=transforms.Compose([transforms.Resize((img_width, img_height)),transforms.ToTensor()])
                           )
   return trainset
