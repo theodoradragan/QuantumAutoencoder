@@ -19,3 +19,8 @@ Results obtained:
 | No. input qubits | No. output qubits | Fidelity  | Train and test time  |
 | ---------------- | ----------------- | --------- | -------------------- |
 |         4        |         3         |   0.997   |        15 mins       |
+|         4        |         2         |   0.989   |        15 mins       |
+|         6        |         5         |   0.996   |        50 mins       |
+|         6        |         4         |   0.985   |        50 mins       |
+|         6        |         3         |   0.902   |        50 mins       |
+|         8        |         6         |   0.939   |        6 hours       |
